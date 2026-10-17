@@ -19,11 +19,7 @@ const { data } = await useListaConteudo('turismo', { categoria: 'turismo', limit
     <div class="container">
       <div class="layout">
         <main class="page-content">
-          <ComumAviso>
-            <strong>Conteúdo em migração:</strong> esta página vai receber toda a estrutura e o conteúdo
-            que hoje constam na aba “Festival de Parintins” do site atual do cliente (textos, fotos e
-            histórico). Assim que o material for enviado, ele substitui os blocos de exemplo abaixo.
-          </ComumAviso>
+          
 
           <ComumCabecalhoSecao titulo="Cronograma do Festival de Parintins" />
           <TurismoCronograma />
