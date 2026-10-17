@@ -1,0 +1,323 @@
+@layer portal {
+  /* ── SIDEBAR ── */
+  .sidebar { display: flex; flex-direction: column; gap: 24px; }
+  .widget { background: var(--branco); border-radius: var(--raio); padding: 20px; box-shadow: var(--sombra-sm); }
+  .widget-title {
+    font-family: var(--fonte-serif); font-size: 1.05rem;
+    margin-bottom: 14px; padding-bottom: 10px;
+    border-bottom: 2px solid var(--cinza-2);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .widget-title::before {
+    content: ''; width: 3px; height: 18px;
+    background: var(--azul); border-radius: 3px; display: block; flex-shrink: 0;
+  }
+  .widget-title i { color: var(--azul); font-size: .95rem; }
+
+  /* Weather */
+  .weather-widget { background: linear-gradient(135deg, var(--azul), var(--ciano)); color: #fff; }
+  .weather-widget .widget-title { color: #fff; border-color: rgba(255,255,255,.2); }
+  .weather-widget .widget-title::before { background: rgba(255,255,255,.5); }
+  .weather-widget .widget-title i { color: #fff; }
+  .weather-current { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+  .weather-temp { font-family: var(--fonte-serif); font-size: 3.2rem; font-weight: 900; line-height: 1; }
+  .weather-icon { font-size: 2.4rem; opacity: .9; }
+  .weather-info p { font-size: .9rem; }
+  .weather-info small { opacity: .7; font-size: .8rem; }
+  .weather-forecast { display: flex; gap: 6px; }
+  .forecast-day {
+    flex: 1; text-align: center;
+    background: rgba(255,255,255,.15);
+    border-radius: 6px; padding: 8px 4px;
+    font-size: .72rem;
+  }
+  .forecast-day strong { display: block; font-size: .95rem; margin: 3px 0; }
+  .forecast-day i { font-size: .85rem; }
+
+  /* Popular */
+  .popular-list { display: flex; flex-direction: column; gap: 14px; }
+  .popular-item { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
+  .popular-num { font-family: var(--fonte-serif); font-size: 1.6rem; font-weight: 900; color: var(--cinza-2); line-height: 1; flex-shrink: 0; width: 28px; transition: color .2s; }
+  .popular-item:hover .popular-num { color: var(--azul); }
+  .popular-item__title { font-size: .875rem; font-weight: 600; line-height: 1.35; transition: color .2s; }
+  .popular-item:hover .popular-item__title { color: var(--azul); }
+  .popular-item__meta { font-size: .72rem; color: var(--cinza-3); margin-top: 3px; display: flex; align-items: center; gap: 4px; }
+
+  /* Newsletter */
+  .newsletter-widget { background: var(--azul-leve); border: 1px solid var(--cinza-2); }
+  .newsletter-widget .widget-title { color: var(--azul); }
+  .newsletter-widget p { font-size: .85rem; color: var(--cinza-4); margin-bottom: 12px; }
+  .nl-form { display: flex; flex-direction: column; gap: 8px; }
+  .nl-input {
+    width: 100%; padding: 10px 14px;
+    border: 1.5px solid var(--cinza-2); border-radius: 6px;
+    font-size: .875rem; font-family: var(--fonte-sans);
+    outline: none; transition: border-color .2s; background: #fff;
+  }
+  .nl-input:focus { border-color: var(--azul); }
+  .nl-btn {
+    background: var(--azul); color: #fff;
+    border: none; padding: 10px;
+    border-radius: 6px; font-size: .875rem; font-weight: 600;
+    cursor: pointer; transition: background .2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .nl-btn:hover { background: var(--azul-mid); }
+  .newsletter-widget .nl-btn { width: 100%; }
+
+  /* ── Modal de assinatura ── */
+  .nl-modal {
+    position: fixed; inset: 0; z-index: 210;
+    background: rgba(6, 16, 30, .72);
+    backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .nl-modal__caixa {
+    position: relative;
+    width: 100%; max-width: 440px;
+    max-height: 90vh; overflow-y: auto;
+    padding: 34px 32px 28px;
+    background: var(--branco);
+    border-radius: 14px;
+    box-shadow: var(--sombra-lg);
+    text-align: center;
+  }
+  /* A faixa da marca no topo da caixa, para o modal não chegar branco de todo. */
+  .nl-modal__caixa::before {
+    content: ''; position: absolute; inset: 0 0 auto; height: 5px;
+    background: linear-gradient(90deg, var(--azul), var(--ciano));
+    border-radius: 14px 14px 0 0;
+  }
+  .nl-modal__fechar {
+    position: absolute; top: 14px; right: 14px;
+    width: 32px; height: 32px; border: 0; border-radius: 8px;
+    background: var(--cinza-1); color: var(--cinza-4);
+    cursor: pointer; transition: background .2s, color .2s;
+  }
+  .nl-modal__fechar:hover { background: var(--cinza-2); color: var(--escuro); }
+  .nl-modal__selo {
+    width: 56px; height: 56px; margin: 0 auto 16px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: var(--azul-leve); color: var(--azul);
+    font-size: 1.5rem;
+  }
+  .nl-modal__titulo { font-family: var(--fonte-serif); font-size: 1.45rem; line-height: 1.2; }
+  .nl-modal__slogan {
+    margin: 10px auto 22px; max-width: 34ch;
+    font-size: .9rem; line-height: 1.6; color: var(--cinza-4);
+  }
+  .nl-modal__form { display: flex; flex-direction: column; gap: 14px; text-align: left; }
+  .nl-modal__campo { display: flex; flex-direction: column; gap: 6px; }
+  .nl-modal__campo span { font-size: .78rem; font-weight: 700; color: var(--cinza-4); letter-spacing: .3px; text-transform: uppercase; }
+  .nl-modal__campo input {
+    width: 100%; padding: 12px 14px;
+    border: 1.5px solid var(--cinza-2); border-radius: 8px;
+    font-size: .92rem; font-family: var(--fonte-sans);
+    outline: none; background: #fff;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .nl-modal__campo input:focus {
+    border-color: var(--azul);
+    box-shadow: 0 0 0 3px var(--azul-leve);
+  }
+  .nl-modal__btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; padding: 13px;
+    border: 0; border-radius: 8px;
+    background: var(--azul); color: #fff;
+    font-size: .95rem; font-weight: 700; font-family: var(--fonte-sans);
+    cursor: pointer; transition: background .2s;
+  }
+  .nl-modal__btn:hover { background: var(--azul-mid); }
+  .nl-modal__btn:disabled { opacity: .7; cursor: default; }
+  .nl-modal__erro { font-size: .82rem; font-weight: 600; color: var(--vermelho); }
+  .nl-modal__nota { font-size: .74rem; color: var(--cinza-3); text-align: center; }
+  .nl-modal__pronto { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .nl-modal__pronto > i { font-size: 2rem; color: var(--verde); }
+  .nl-modal__pronto p { font-size: .92rem; line-height: 1.6; color: var(--cinza-4); }
+
+  .nl-modal-enter-active, .nl-modal-leave-active { transition: opacity .2s ease; }
+  .nl-modal-enter-from, .nl-modal-leave-to { opacity: 0; }
+  .nl-modal-enter-active .nl-modal__caixa { transition: transform .22s ease; }
+  .nl-modal-enter-from .nl-modal__caixa { transform: translateY(12px) scale(.97); }
+
+  @media (max-width: 480px) {
+    .nl-modal__caixa { padding: 30px 22px 24px; }
+  }
+
+  /* Tags */
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 12px;
+    background: var(--cinza-1); border: 1.5px solid var(--cinza-2);
+    border-radius: 20px; font-size: .78rem; font-weight: 500;
+    color: var(--cinza-4); transition: all .2s;
+  }
+  .tag:hover { background: var(--azul); border-color: var(--azul); color: #fff; }
+  .tag i { font-size: .7rem; }
+
+  /* Anúncio */
+  .ad-widget {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #fff; text-align: center; padding: 24px 20px; border-radius: var(--raio);
+  }
+  .ad-widget p { font-size: .72rem; opacity: .5; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .1em; }
+  .ad-widget h3 { font-family: var(--fonte-serif); font-size: 1.1rem; margin-bottom: 6px; }
+  .ad-widget small { opacity: .6; font-size: .75rem; }
+  /* A arte do anunciante ocupa a largura da coluna e guarda a própria
+     proporção — banner de 300×250 e faixa alta cabem igual, sem corte. */
+  .ad-banner-link { display: block; }
+  .ad-banner {
+    display: block; width: 100%; height: auto;
+    border-radius: 6px; margin-top: 10px;
+  }
+  .ad-banner-link:hover .ad-banner { opacity: .92; }
+
+  /* O widget do tempo inteiro é um botão que abre os 15 dias. */
+  .weather-abrir {
+    display: block; width: 100%;
+    background: none; border: 0; padding: 0;
+    color: inherit; font: inherit; text-align: left; cursor: pointer;
+  }
+  .weather-cta {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    margin-top: 12px; padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,.2);
+    font-size: .78rem; font-weight: 600; opacity: .85;
+    transition: opacity .2s, gap .2s;
+  }
+  .weather-abrir:hover .weather-cta { opacity: 1; gap: 10px; }
+
+  /* Troca a previsão do IP pela localização exata do navegador. */
+  .weather-local {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    width: 100%; margin-top: 10px; padding: 7px 10px;
+    background: rgba(255,255,255,.12); border: 0; border-radius: 6px;
+    color: #fff; font: inherit; font-size: .74rem; font-weight: 600;
+    opacity: .85; cursor: pointer; transition: background .2s, opacity .2s;
+  }
+  .weather-local:hover:not(:disabled) { background: rgba(255,255,255,.22); opacity: 1; }
+  .weather-local:disabled { cursor: progress; }
+  .weather-local--ativo, .weather-local--erro { background: none; cursor: default; opacity: .75; }
+  .weather-local--erro { color: #ffe0e0; }
+
+  /* ── Painel de 15 dias ── */
+  .tempo-modal {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(10, 25, 47, .55);
+    backdrop-filter: blur(3px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .tempo-modal__caixa {
+    background: var(--branco); border-radius: var(--raio);
+    box-shadow: var(--sombra-md);
+    width: 100%; max-width: 560px;
+    max-height: 90vh; overflow-y: auto;
+  }
+  .tempo-modal__topo {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, var(--azul), var(--ciano));
+    color: #fff;
+    border-radius: var(--raio) var(--raio) 0 0;
+  }
+  .tempo-modal__topo h2 { font-family: var(--fonte-serif); font-size: 1.25rem; line-height: 1.2; }
+  .tempo-modal__topo p { font-size: .85rem; opacity: .85; margin-top: 2px; }
+  .tempo-modal__topo button {
+    background: rgba(255,255,255,.2); border: 0; color: #fff;
+    width: 32px; height: 32px; border-radius: 8px; cursor: pointer; flex-shrink: 0;
+    transition: background .2s;
+  }
+  .tempo-modal__topo button:hover { background: rgba(255,255,255,.35); }
+  .tempo-modal__agora {
+    display: flex; align-items: center; gap: 16px;
+    padding: 18px 24px; border-bottom: 1px solid var(--cinza-2);
+  }
+  .tempo-modal__agora > i { font-size: 2.2rem; color: var(--azul); }
+  .tempo-modal__grau { font-family: var(--fonte-serif); font-size: 2.6rem; font-weight: 900; line-height: 1; }
+  .tempo-modal__agora p { font-weight: 600; font-size: .95rem; }
+  .tempo-modal__agora small { color: var(--cinza-4); font-size: .8rem; }
+  .tempo-modal__lista { list-style: none; padding: 8px 12px; }
+  .tempo-modal__lista li {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) 20px minmax(0,1fr) 56px 72px;
+    align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 8px;
+    font-size: .85rem;
+  }
+  .tempo-modal__lista li:nth-child(odd) { background: var(--cinza-1); }
+  .tempo-modal__lista li > i { color: var(--azul); text-align: center; }
+  .tempo-modal__dia { font-weight: 600; }
+  .tempo-modal__rotulo { color: var(--cinza-4); font-size: .8rem; }
+  .tempo-modal__chuva { color: var(--ciano); font-size: .78rem; white-space: nowrap; }
+  .tempo-modal__faixa { text-align: right; white-space: nowrap; }
+  .tempo-modal__faixa strong { font-size: .95rem; }
+  .tempo-modal__faixa small { color: var(--cinza-4); margin-left: 4px; }
+  .tempo-modal__rodape {
+    padding: 14px 24px 20px; font-size: .75rem; color: var(--cinza-4);
+    border-top: 1px solid var(--cinza-2);
+  }
+  .tempo-modal__rodape a { color: var(--azul); font-weight: 600; }
+
+  @media (max-width: 560px) {
+    .tempo-modal__lista li { grid-template-columns: minmax(0,1fr) 20px 52px 64px; }
+    .tempo-modal__rotulo { display: none; }
+  }
+}
+
+@layer portal {
+  /* ── APOIE O PORTAL ── */
+  /*
+     Visual próprio, diferente do card de publicidade: o de anúncio é escuro e
+     neutro (a arte do anunciante é que fala), este é da casa — fundo na cor da
+     marca, para o leitor ler como pedido do portal e não como mais um banner.
+  */
+  .apoio-widget {
+    background: linear-gradient(135deg, var(--azul), var(--azul-mid));
+    color: var(--cor-primaria-contraste);
+  }
+  .apoio-widget .widget-title { color: inherit; border-bottom-color: rgba(255,255,255,.2); }
+  .apoio-widget .widget-title i { color: var(--ciano); }
+  .apoio-widget__texto { font-size: .88rem; line-height: 1.65; opacity: .92; margin-bottom: 14px; }
+
+  .apoio-widget__botao {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: var(--ciano); color: #1a1200;
+    border-radius: 8px; padding: 11px 16px;
+    font-size: .92rem; font-weight: 700;
+    transition: transform .2s, filter .2s;
+  }
+  .apoio-widget__botao:hover { transform: translateY(-2px); filter: brightness(1.06); }
+
+  .apoio-widget__pix {
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,.18);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .apoio-widget__rotulo {
+    font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; opacity: .65;
+  }
+  /* `break-all` porque a chave pode ser um e-mail longo ou uma chave
+     aleatória de 32 caracteres — sem isso ela estoura a largura da coluna. */
+  .apoio-widget__chave {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .82rem; line-height: 1.5;
+    background: rgba(0,0,0,.22); border-radius: 6px; padding: 8px 10px;
+    word-break: break-all;
+  }
+  .apoio-widget__copiar {
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    background: rgba(255,255,255,.14); color: inherit;
+    border: 1px solid rgba(255,255,255,.25); border-radius: 6px;
+    padding: 8px 12px; font-size: .82rem; font-weight: 600;
+    font-family: var(--fonte-sans); cursor: pointer;
+    transition: background .2s;
+  }
+  .apoio-widget__copiar:hover { background: rgba(255,255,255,.24); }
+
+  .apoio-widget__nota { font-size: .75rem; opacity: .7; margin-top: 10px; }
+}

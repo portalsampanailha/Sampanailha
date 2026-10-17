@@ -1,0 +1,148 @@
+@layer portal {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    /* ── TEMA EDITÁVEL ──────────────────────────────────────────────
+       Valores padrão da marca. O painel (/admin/configuracoes → Aparência)
+       grava a escolha do administrador na API e o SSR injeta um <style> no
+       <head> que sobrescreve este bloco — por isso nada aqui é !important.
+       ──────────────────────────────────────────────────────────────── */
+    --cor-primaria:           #0c560b;
+    --cor-primaria-contraste: #ffffff;
+    --cor-destaque:           #d9a441;
+    --cor-fundo:              #f5f7fa;
+    --cor-texto:              #111827;
+    --cor-titulo:             #0c560b;
+    --cor-h1: var(--cor-titulo);
+    --cor-h2: var(--cor-titulo);
+    --cor-h3: var(--cor-titulo);
+    --cor-h4: var(--cor-titulo);
+    --cor-h5: var(--cor-titulo);
+    --cor-h6: var(--cor-titulo);
+
+    /* Tons derivados da cor principal — o painel não precisa pedi-los. */
+    --cor-primaria-media:  color-mix(in srgb, var(--cor-primaria) 72%, #ffffff);
+    --cor-primaria-suave:  color-mix(in srgb, var(--cor-primaria) 10%, #ffffff);
+    --cor-primaria-escura: color-mix(in srgb, var(--cor-primaria) 82%, #000000);
+
+    /* Apelidos históricos: o CSS do portal nasceu com a paleta azul e segue
+       usando estes nomes. Mantê-los evita reescrever ~90 declarações. */
+    --azul:      var(--cor-primaria);
+    --azul-mid:  var(--cor-primaria-media);
+    --azul-leve: var(--cor-primaria-suave);
+    --ciano:     var(--cor-destaque);
+    --escuro:    var(--cor-texto);
+
+    --cinza-1:   #f5f7fa;
+    --cinza-2:   #e9ecef;
+    --cinza-3:   #adb5bd;
+    --cinza-4:   #6c757d;
+    --branco:    #ffffff;
+    --vermelho:  #e63946;
+    --verde:     #2dc653;
+    --amarelo:   #e6a817;
+    /* Tipografia única do portal: Arial em títulos e corpo. Os dois nomes
+       continuam porque o CSS das páginas já os referencia. */
+    --fonte-serif: Arial, Helvetica, sans-serif;
+    --fonte-sans:  Arial, Helvetica, sans-serif;
+    /* Corpo de texto do portal: 16px. O pedido do cliente era subir a leitura
+       de 14px para 16px, e o texto das matérias (`.post-body p`) já estava
+       nesse tamanho — o token alinha as páginas institucionais e os blocos de
+       texto corrido ao mesmo valor, sem mexer nos rótulos de interface
+       (metadados, etiquetas, menus), que seguem na escala menor de propósito. */
+    --texto-corpo: 1rem;
+    --sombra-sm: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.05);
+    --sombra-md: 0 4px 16px rgba(0,0,0,.10);
+    --sombra-lg: 0 12px 40px rgba(0,0,0,.15);
+    --raio: 8px;
+
+    /* Altura do cabeçalho fixo. Fica aqui porque não é só o header que a usa:
+       o filtro de editorias e a barra de compartilhamento grudam logo abaixo
+       dele e precisavam repetir o número na mão — quando a logo cresceu, os
+       dois ficaram para trás. O valor do celular está em responsive.css. */
+    --altura-cabecalho: 100px;
+    /* A borda inferior azul do cabeçalho, que também cobre quem gruda nele. */
+    --borda-cabecalho: 3px;
+  }
+
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+
+  body { font-family: var(--fonte-sans); color: var(--cor-texto); background: var(--cor-fundo); line-height: 1.6; }
+  a { color: inherit; text-decoration: none; }
+
+  /* ── COR DOS TÍTULOS ──────────────────────────────────────────────
+     Aplicada no site público (o layout `default` marca a raiz com
+     `.portal-tema`), nunca no painel, que segue o tema do shadcn.
+     ──────────────────────────────────────────────────────────────── */
+  .portal-tema h1 { color: var(--cor-h1); }
+  .portal-tema h2 { color: var(--cor-h2); }
+  .portal-tema h3 { color: var(--cor-h3); }
+  .portal-tema h4 { color: var(--cor-h4); }
+  .portal-tema h5 { color: var(--cor-h5); }
+  .portal-tema h6 { color: var(--cor-h6); }
+
+  /* Blocos de fundo escuro ou colorido: o título continua herdando o branco
+     do container. Um bloco escuro novo entra nesta lista. */
+  .portal-tema :is(
+    .page-hero,
+    .site-footer,
+    .breaking,
+    .hero-main__content,
+    .hero-secondary__content,
+    .weather-widget,
+    .ad-widget,
+    .tempo-modal__topo
+  ) :is(h1, h2, h3, h4, h5, h6) { color: inherit; }
+}
+
+@layer portal {
+  /* ── ACESSIBILIDADE E NAVEGAÇÃO ───────────────────────────────────
+     O portal é navegado no teclado (redação) e no leitor de tela; o
+     contorno de foco tinha sumido junto com o reset.
+     ──────────────────────────────────────────────────────────────── */
+  .portal-tema :is(a, button, input, select, textarea, [tabindex]):focus-visible {
+    outline: 3px solid var(--cor-destaque);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  #conteudo:focus { outline: none; }
+
+  /* Primeiro Tab da página: pula cabeçalho, ticker e barra de editorias. */
+  .pular-conteudo {
+    position: fixed; top: 8px; left: 8px; z-index: 300;
+    transform: translateY(-160%);
+    background: var(--azul); color: #fff;
+    padding: 10px 16px; border-radius: 8px;
+    font-size: .85rem; font-weight: 600;
+    box-shadow: var(--sombra-md);
+    transition: transform .18s;
+  }
+  .pular-conteudo:focus { transform: translateY(0); }
+
+  /* ── VOLTAR AO TOPO ── */
+  .voltar-topo {
+    /* A barra de cookies mora no mesmo canto e publica a própria altura;
+       enquanto ela estiver na tela, o botão espera acima dela. */
+    position: fixed; right: 18px; bottom: calc(18px + var(--altura-aviso-cookies, 0px)); z-index: 90;
+    transition: bottom .28s ease;
+    width: 46px; height: 46px; border-radius: 50%;
+    border: none; cursor: pointer;
+    background: var(--azul); color: var(--cor-primaria-contraste);
+    box-shadow: var(--sombra-lg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: .95rem;
+    transition: background .2s, transform .2s;
+  }
+  .voltar-topo:hover { background: var(--azul-mid); transform: translateY(-2px); }
+  .voltar-topo-enter-active, .voltar-topo-leave-active { transition: opacity .2s, transform .2s; }
+  .voltar-topo-enter-from, .voltar-topo-leave-to { opacity: 0; transform: translateY(10px); }
+
+  /* No celular sobe um pouco para não brigar com a barra do navegador. */
+  @media (max-width: 640px) {
+    .voltar-topo { right: 14px; bottom: calc(14px + max(var(--altura-aviso-cookies, 0px), env(safe-area-inset-bottom, 0px))); }
+  }
+}

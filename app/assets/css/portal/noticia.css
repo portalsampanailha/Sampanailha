@@ -1,0 +1,78 @@
+@layer portal {
+  /* ── PÁGINA DE MATÉRIA ── */
+  .post-layout { display: grid; grid-template-columns: 56px 1fr 320px; gap: 32px; padding: 32px 0 48px; align-items: start; }
+  .post-body { max-width: 720px; }
+  .post-body h1 { font-family: var(--fonte-serif); font-size: 2rem; line-height: 1.2; margin-bottom: 16px; }
+  .post-body h2 { font-family: var(--fonte-serif); font-size: 1.35rem; line-height: 1.3; margin: 26px 0 12px; }
+  .post-body .meta { color: var(--cinza-4); margin-bottom: 20px; }
+  .post-body .meta i { color: var(--cinza-3); }
+  .post-capa { margin: 0 0 24px; }
+  .post-capa .post-cover { margin-bottom: 0; }
+  .post-cover { width: 100%; aspect-ratio: 16/9; border-radius: var(--raio); overflow: hidden; position: relative; margin-bottom: 24px; box-shadow: var(--sombra-md); }
+  .post-cover .img-bg i { font-size: 4rem; }
+  .post-body p { font-size: var(--texto-corpo); color: var(--escuro); margin-bottom: 18px; line-height: 1.85; }
+  .post-body ul { margin: 0 0 18px 20px; color: var(--escuro); list-style: disc; }
+  .post-body li { margin-bottom: 8px; line-height: 1.75; font-size: var(--texto-corpo); }
+  .post-body li::marker { color: var(--azul); }
+  .post-body blockquote {
+    border-left: 4px solid var(--azul); background: var(--azul-leve);
+    padding: 14px 20px; border-radius: 0 var(--raio) var(--raio) 0;
+    font-family: var(--fonte-serif); font-size: 1.05rem; margin: 0 0 20px;
+  }
+  /* ── Corpo vindo do editor ── */
+  .post-body h3 { font-family: var(--fonte-serif); font-size: 1.15rem; line-height: 1.35; margin: 22px 0 10px; }
+  .post-body ol { margin: 0 0 18px 22px; color: var(--escuro); list-style: decimal; }
+  .post-body a { color: var(--azul); text-decoration: underline; text-underline-offset: 2px; }
+  .post-body a:hover { opacity: .8; }
+  .post-body strong { font-weight: 700; }
+  .post-body figure { margin: 24px 0; }
+  .post-body img { max-width: 100%; height: auto; border-radius: var(--raio); display: block; margin: 0 auto; }
+  /* Legenda e crédito sob a foto. Capa e imagens do corpo usam a mesma régua:
+     sem isso a mesma matéria mostra o crédito em dois tamanhos diferentes,
+     dependendo de a foto ser a de cima ou uma do meio do texto. */
+  .post-body figcaption { font-size: .82rem; line-height: 1.45; color: var(--cinza-4); text-align: center; margin-top: 8px; }
+
+  /* Legenda e crédito na mesma linha, alinhados pelo baseline.
+     Empilhados, o crédito ganhava peso de segunda legenda e afastava o texto
+     da matéria da foto sem precisar. Lado a lado eles leem como uma linha só
+     de apoio — e o `baseline` é o que faz os dois tamanhos de letra assentarem
+     na mesma régua, coisa que `center` não dá. Quebra em duas linhas quando
+     não couber, seguindo centralizado. */
+  .post-body .foto-texto {
+    display: flex; flex-wrap: wrap;
+    align-items: baseline; justify-content: center;
+    column-gap: 8px; row-gap: 2px;
+  }
+  /* O crédito continua um degrau menor: é subordinado à legenda, não par dela. */
+  .post-body .foto-texto__credito { font-size: .72rem; color: var(--cinza-3); }
+  /* Separador só quando há crédito depois — sem ele os dois textos viram uma
+     frase só ("Praia ao entardecer Divulgação"). Ele fica preso ao fim da
+     legenda, e não na frente do crédito: assim, quando a linha quebra no
+     celular, o ponto quebra junto com a legenda em vez de aparecer pendurado
+     abrindo a linha de baixo. O espaço é inquebrável pelo mesmo motivo. */
+  .post-body .foto-texto > span:has(+ .foto-texto__credito)::after {
+    content: '\00a0·'; color: var(--cinza-3);
+  }
+
+  /* Alinhamento vindo da barra do editor. Chega como classe, não como
+     `style="text-align"`: o valid_elements limpa atributo que o portal não
+     conhece, então o style era descartado ao salvar — o botão parecia
+     funcionar na tela e o texto voltava para a esquerda depois de publicado. */
+  .post-body .texto-esquerda { text-align: left; }
+  .post-body .texto-centro   { text-align: center; }
+  .post-body .texto-direita  { text-align: right; }
+  .post-body hr { border: 0; border-top: 1px solid var(--cinza-2); margin: 28px 0; }
+  /* Tabela larga rola dentro de si em vez de esticar a página no celular. */
+  .post-body table { width: 100%; border-collapse: collapse; margin: 0 0 20px; font-size: .92rem; display: block; overflow-x: auto; }
+  .post-body th, .post-body td { border: 1px solid var(--cinza-2); padding: 8px 10px; text-align: left; }
+  .post-body th { background: var(--cinza-1); font-weight: 700; }
+
+  .post-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0; }
+  .post-breadcrumb { font-size: .78rem; color: var(--cinza-4); padding: 16px 0 0; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .post-breadcrumb a:hover { color: var(--azul); }
+  .post-related { margin-top: 32px; }
+  @media (max-width: 1024px) {
+    .post-layout { grid-template-columns: 1fr; }
+    .share-bar--floating { position: static; flex-direction: row; }
+  }
+}
