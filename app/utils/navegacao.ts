@@ -1,0 +1,170 @@
+/** Estrutura de navegação do site público e do dashboard. */
+
+export interface ItemMenu {
+  rotulo: string
+  para: string
+  icone?: string
+  filhos?: ItemMenu[]
+}
+
+/**
+ * Destino de uma editoria — um lugar só, para o site inteiro.
+ *
+ * Clicar numa editoria filtra os conteúdos por ela, em qualquer menu: é o que
+ * `/categoria/[slug]` faz. Antes o mesmo rótulo levava a dois lugares — o menu
+ * principal mandava "Turismo" para `/turismo` e a barra mandava para
+ * `/categoria/turismo` —, e as duas páginas nem mostravam a mesma quantidade de
+ * matéria. Quem navegava não tinha como saber que eram a mesma editoria.
+ */
+export function rotaDaCategoria(slug: string): string {
+  return `/categoria/${slug}`
+}
+
+/**
+ * Item do menu principal.
+ *
+ * Vem em duas formas. A fixa (`rotulo` + `para`) é para o que não é editoria:
+ * Início, Notícias, Dicas. A outra traz só `categoria`, o slug no banco — e aí
+ * rótulo, ícone e destino são lidos da API pelo `useMenuPrincipal`.
+ *
+ * A diferença importa: com o slug, renomear "Meio Ambiente" no painel renomeia
+ * o menu, e uma editoria tirada do ar some da navegação sozinha. Com o rótulo
+ * escrito aqui, o menu ia envelhecendo em silêncio até discordar da barra de
+ * categorias — que sempre leu do banco.
+ */
+export interface ItemPrincipal {
+  /** Slug da editoria no banco. Quando presente, manda no rótulo e no destino. */
+  categoria?: string
+  /** Só para os itens fixos, que não são editoria. */
+  rotulo?: string
+  para?: string
+  icone?: string
+  /** Páginas curadas que vivem sob este item, no submenu. */
+  filhos?: ItemMenu[]
+}
+
+export const MENU_PRINCIPAL: ItemPrincipal[] = [
+  { rotulo: 'Início', para: '/', icone: 'fas fa-house' },
+  { rotulo: 'Notícias', para: '/noticias', icone: 'fas fa-newspaper' },
+  {
+    categoria: 'turismo',
+    filhos: [
+      { rotulo: 'Todas as matérias', para: '/categoria/turismo', icone: 'fas fa-suitcase-rolling' },
+      // A página curada do Parintins continua no ar e no menu: ela tem
+      // cronograma e histórico que a listagem por editoria não mostra.
+      { rotulo: 'Festival de Parintins', para: '/turismo', icone: 'fas fa-drum' },
+    ],
+  },
+  // "Dicas" é tipo de conteúdo, não editoria — não existe no banco de
+  // categorias, então continua fixa aqui.
+  { rotulo: 'Dicas', para: '/dicas', icone: 'fas fa-lightbulb' },
+  // O podcast deixou de ser rascunho: a seção passou a ter cadastro no painel
+  // e feed próprio, então entra no menu como qualquer outra.
+  { rotulo: 'Podcast', para: '/podcast', icone: 'fas fa-microphone-lines' },
+  {
+    categoria: 'cultura',
+    filhos: [
+      { rotulo: 'Todas as matérias', para: '/categoria/cultura', icone: 'fas fa-newspaper' },
+      { rotulo: 'Cultura & Arte', para: '/cultura', icone: 'fas fa-palette' },
+      { rotulo: 'Quem Somos', para: '/quem-somos', icone: 'fas fa-users' },
+      { rotulo: 'O Projeto Sampa na Ilha', para: '/cultura/o-projeto', icone: 'fas fa-seedling' },
+      { rotulo: 'Grupo de Dança', para: '/cultura/grupo-danca', icone: 'fas fa-music' },
+      { rotulo: 'Workshops & Artesanato', para: '/cultura/workshops', icone: 'fas fa-hands-helping' },
+      { rotulo: 'Eventos & Atrações', para: '/cultura/eventos', icone: 'fas fa-calendar-day' },
+    ],
+  },
+  { categoria: 'vagas' },
+]
+
+/**
+ * Menu lateral do painel. Lista simples, sem seções: a ação de criar conteúdo
+ * fica na barra superior, para não competir com o item "Conteúdos".
+ */
+export interface ItemMenuAdmin extends ItemMenu {
+  /** Some do menu de quem não é editor-chefe. */
+  soChefe?: boolean
+}
+
+export const MENU_ADMIN: ItemMenuAdmin[] = [
+  { rotulo: 'Dashboard', para: '/admin/dashboard', icone: 'LayoutDashboard' },
+  { rotulo: 'Conteúdos', para: '/admin/posts', icone: 'FileText' },
+  { rotulo: 'Dicas & Guias', para: '/admin/guias', icone: 'Lightbulb' },
+  { rotulo: 'Mídia Kit', para: '/admin/midia-kit', icone: 'File' },
+  { rotulo: 'Avisos', para: '/admin/avisos', icone: 'Megaphone', soChefe: true },
+  // Cadastrar e tirar banner do ar é decisão comercial: a API só aceita de
+  // quem administra o portal, e o menu segue a mesma régua.
+  { rotulo: 'Publicidade', para: '/admin/publicidade', icone: 'Image', soChefe: true },
+  { rotulo: 'Podcast', para: '/admin/podcast', icone: 'Mic' },
+  { rotulo: 'Vagas', para: '/admin/vagas', icone: 'Briefcase' },
+  { rotulo: 'Workshops', para: '/admin/workshops', icone: 'GraduationCap' },
+  { rotulo: 'Eventos', para: '/admin/eventos', icone: 'CalendarDays' },
+  { rotulo: 'Categorias', para: '/admin/categorias', icone: 'Tags', soChefe: true },
+  { rotulo: 'Equipe', para: '/admin/equipe', icone: 'Users', soChefe: true },
+  { rotulo: 'Newsletter', para: '/admin/newsletter', icone: 'Mail' },
+  { rotulo: 'Meu perfil', para: '/admin/perfil', icone: 'UserCircle' },
+  { rotulo: 'Configurações', para: '/admin/configuracoes', icone: 'Settings' },
+]
+
+export const RODAPE_EDITORIAS: ItemMenu[] = [
+  { rotulo: 'Turismo', para: '/categoria/turismo' },
+  { rotulo: 'Meio Ambiente', para: '/categoria/meio-ambiente' },
+  { rotulo: 'Gastronomia', para: '/categoria/gastronomia' },
+  { rotulo: 'Esportes', para: '/categoria/esportes' },
+  { rotulo: 'Cultura', para: '/categoria/cultura' },
+]
+
+/*
+   "Anuncie" e "Área da redação" saíram a pedido do cliente: o primeiro não
+   tinha página própria (caía em /informacoes como os vizinhos) e o segundo
+   levava o leitor direto para a tela de login do painel. O acesso da equipe
+   continua em /admin, citado na página de Informações & Serviço.
+
+   "Informações & Serviço" e "Contato" saíram depois, na mesma linha de
+   limpeza: os dois apontavam para /informacoes, então a coluna gastava três
+   entradas (com "Quem Somos") para levar a duas páginas. Depois disso a própria
+   página saiu do ar por enquanto, junto com o botão "Assinar" que levava até
+   ela — ver `ignore` no nuxt.config e o comentário no cabeçalho.
+*/
+/*
+   Termos de Uso e Política de Privacidade saíram desta lista: não são rota,
+   abrem em modal (`utils/legal.ts` + `ComumModalLegal`) pelo rodapé e pelo
+   aviso de cookies. Mandar quem quer conferir uma cláusula para /informacoes
+   tirava a pessoa da matéria e ainda dependia de alguém cadastrar o texto no
+   painel — documento jurídico não pode depender disso.
+*/
+export const RODAPE_PORTAL: ItemMenu[] = [
+  { rotulo: 'Quem Somos', para: '/quem-somos' },
+  { rotulo: 'Podcast', para: '/podcast' },
+  { rotulo: 'Trabalhe Conosco', para: '/vagas' },
+]
+
+/** Número oficial de atendimento, só com dígitos — é o formato do wa.me. */
+const WHATSAPP_DIGITOS = '5511913060670'
+
+export const CONTATO = {
+  email: 'contato@portalsampanailha.com.br',
+  telefone: '(11) 91306-0670',
+  whatsapp: '(11) 91306-0670',
+  /** Redirect oficial do WhatsApp: abre o app no celular e o Web no desktop. */
+  whatsappUrl: `https://wa.me/${WHATSAPP_DIGITOS}`,
+  instagram: '@portalsampanailha',
+  instagramUrl: 'https://www.instagram.com/portalsampanailha/',
+  facebookUrl: 'https://www.facebook.com/portalsampanailha',
+  razaoSocial: 'Sampa na Ilha Produções e Comunicação LTDA',
+  cnpj: '66.549.829/0001-56',
+  tagline: 'Conectando São Paulo ao Brasil',
+}
+
+export const REDES_SOCIAIS = [
+  { rotulo: 'Instagram', icone: 'fab fa-instagram', url: CONTATO.instagramUrl },
+  { rotulo: 'Facebook', icone: 'fab fa-facebook-f', url: CONTATO.facebookUrl },
+  { rotulo: 'WhatsApp', icone: 'fab fa-whatsapp', url: CONTATO.whatsappUrl },
+]
+
+/** Canais de atendimento — usados no rodapé, em /quem-somos e em /informacoes. */
+export const CANAIS_ATENDIMENTO = [
+  { rotulo: 'WhatsApp oficial', valor: CONTATO.whatsapp, icone: 'fab fa-whatsapp', url: CONTATO.whatsappUrl },
+  { rotulo: 'E-mail', valor: CONTATO.email, icone: 'fas fa-envelope', url: `mailto:${CONTATO.email}` },
+  { rotulo: 'Instagram', valor: CONTATO.instagram, icone: 'fab fa-instagram', url: CONTATO.instagramUrl },
+  { rotulo: 'Facebook', valor: '/portalsampanailha', icone: 'fab fa-facebook-f', url: CONTATO.facebookUrl },
+]
