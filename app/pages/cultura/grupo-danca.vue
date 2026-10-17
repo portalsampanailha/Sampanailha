@@ -18,10 +18,7 @@ useSeoMeta({
     <div class="container">
       <div class="layout">
         <main class="page-content">
-          <ComumAviso>
-            <strong>Página em construção:</strong> em breve, esta seção vai reunir o formulário de
-            inscrição para o Grupo de Dança, o termo de participação e as fotos das atividades.
-          </ComumAviso>
+          
 
           <p>
             O Grupo de Dança é uma das frentes de Formação Cultural do projeto Sampa na Ilha: um espaço
