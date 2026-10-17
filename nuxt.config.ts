@@ -1,0 +1,88 @@
+import { fileURLToPath } from 'node:url'
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineNuxtConfig({
+  compatibilityDate: '2025-07-15',
+  devtools: { enabled: true },
+
+  modules: ['@pinia/nuxt', 'shadcn-nuxt'],
+
+  /**
+   * "Informações & Serviço" fora do ar por enquanto, a pedido. O arquivo
+   * continua no projeto — só não vira rota, então /informacoes responde 404 em
+   * vez de abrir uma página sem link para ela. Para trazer de volta, apague
+   * esta entrada (e descomente o botão "Assinar" no cabeçalho).
+   *
+   * Só o índice sai: `informacoes/[slug].vue` continua valendo, senão as
+   * matérias do tipo "informação" publicadas no painel quebrariam nas
+   * listagens, que apontam para /informacoes/<slug>.
+   */
+  ignore: ['app/pages/informacoes/index.vue'],
+
+  css: [
+    '~/assets/css/tailwind.css',
+    '~/assets/css/portal/index.css',
+    // Estilo do vue-sonner. Sem ele o aviso monta no DOM como um <li> comum,
+    // sem posicionamento nem fundo, e cai no fim do documento — o código
+    // dispara, o elemento existe e ninguém vê nada. O wrapper em
+    // components/ui/sonner só define as variáveis de cor que este CSS consome.
+    'vue-sonner/style.css',
+  ],
+
+  vite: {
+    plugins: [tailwindcss()],
+  },
+
+  nitro: {
+    /**
+     * TinyMCE roda self-hosted: os arquivos saem de node_modules direto para o
+     * bundle, sem CDN nem chave de API. O Nitro copia isto para .output/public
+     * no build, então o container não precisa de node_modules em runtime.
+     */
+    publicAssets: [
+      {
+        baseURL: 'tinymce',
+        dir: fileURLToPath(new URL('./node_modules/tinymce', import.meta.url)),
+        maxAge: 60 * 60 * 24 * 365,
+      },
+    ],
+  },
+
+  shadcn: {
+    prefix: '',
+    componentDir: './app/components/ui',
+  },
+
+  components: [
+    { path: '~/components/ui', pathPrefix: false },
+    { path: '~/components', pathPrefix: true },
+  ],
+
+  runtimeConfig: {
+    // Back-end do portal (api_python_sampa). As rotas em server/api/ apenas
+    // repassam para cá, guardando o token em cookie httpOnly.
+    apiBase: process.env.NUXT_API_BASE || 'http://localhost:9041/api/v1',
+    public: {
+      siteName: 'Portal Sampa na Ilha',
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+      // Origem pública da API, usada para montar a URL absoluta das fotos.
+      apiOrigin: process.env.NUXT_PUBLIC_API_ORIGIN || 'http://localhost:9041',
+    },
+  },
+
+  app: {
+    head: {
+      htmlAttrs: { lang: 'pt-BR' },
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/sampailha.png' },
+        { rel: 'apple-touch-icon', href: '/sampailha.png' },
+        // Sem webfont: a tipografia do portal é Arial, que já existe no
+        // sistema. O download do Google Fonts foi removido junto com ela.
+        {
+          rel: 'stylesheet',
+          href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css',
+        },
+      ],
+    },
+  },
+})
