@@ -199,5 +199,3 @@ autenticado — o site público devolve 404.
 
 ## Desenvolvido por
 
-**Guilherme Augusto dos Santos Viana**
-CNPJ: 61.676.448/0001-14
