@@ -1,7 +1,7 @@
 # Dokploy — frontend Portal Sampa na Ilha (Nuxt 4 SSR)
-# URL: https://portalsampanailha.com.br
+# URL: https://sampanailhatur.com.br
 # Container port: 9042 (uma acima da API, que roda na 9041)
-# API: https://api.portalsampanailha.com.br/api/v1
+# API: https://api.sampanailhatur.com.br/api/v1
 
 services:
   web:
@@ -29,9 +29,9 @@ services:
     environment:
       NITRO_HOST: 0.0.0.0
       NITRO_PORT: 9042
-      NUXT_API_BASE: https://api.portalsampanailha.com.br/api/v1
-      NUXT_PUBLIC_API_ORIGIN: https://api.portalsampanailha.com.br
-      NUXT_PUBLIC_SITE_URL: https://portalsampanailha.com.br
+      NUXT_API_BASE: https://api.sampanailhatur.com.br/api/v1
+      NUXT_PUBLIC_API_ORIGIN: https://api.sampanailhatur.com.br
+      NUXT_PUBLIC_SITE_URL: https://sampanailhatur.com.br
     networks:
       - dokploy-network
     labels:
