@@ -31,13 +31,13 @@ NUXT_PUBLIC_API_ORIGIN=http://localhost:9041      # usado para montar a URL das 
 ```
 
 Em produção (`docker-compose.dokploy.yml` / `.env.production.example`) o portal
-responde em **https://portalsampanailha.com.br** e a API em
-**https://api.portalsampanailha.com.br**:
+responde em **https://sampanailhatur.com.br** e a API em
+**https://api.sampanailhatur.com.br**:
 
 ```bash
-NUXT_API_BASE=https://api.portalsampanailha.com.br/api/v1
-NUXT_PUBLIC_API_ORIGIN=https://api.portalsampanailha.com.br
-NUXT_PUBLIC_SITE_URL=https://portalsampanailha.com.br
+NUXT_API_BASE=https://api.sampanailhatur.com.br/api/v1
+NUXT_PUBLIC_API_ORIGIN=https://api.sampanailhatur.com.br
+NUXT_PUBLIC_SITE_URL=https://sampanailhatur.com.br
 ```
 
 O CORS da API libera só essas duas origens https, então o portal tem de
