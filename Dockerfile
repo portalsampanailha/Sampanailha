@@ -1,4 +1,4 @@
-# Portal Sampa na Ilha — Frontend (Nuxt 4 SSR → Node/Nitro)
+# Sampa na Ilha — Frontend (Nuxt 4 SSR → Node/Nitro)
 #
 # Diferente do client_training (Vue+Vite estatico servido por nginx), este app
 # tem rotas em server/api/ que guardam o token em cookie httpOnly. Precisa de
